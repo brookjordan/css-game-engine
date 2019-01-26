@@ -1,0 +1,175 @@
+-
+  const map = {
+    width: 3,
+    height: 2,
+    props: [
+      'character',
+      'overlay',
+    ],
+    areas: [
+      {
+        name: '1-1',
+        initial: true,
+        values: [
+          {
+            name: 'key-1',
+            type: 'key',
+          },
+          'trap-door',
+        ],
+        props: [
+          'green-lock',
+          'blue-lock',
+          'red-lock',
+        ]
+      },
+      {
+        name: '2-1',
+        values: [
+          {
+            name: 'key-2',
+            type: 'key',
+          },
+        ],
+      },
+      {
+        name: '3-1',
+      },
+      {
+        name: '1-2',
+      },
+      {
+        name: '2-2',
+        accessible: false,
+      },
+      {
+        name: '3-2',
+        values: [
+          {
+            name: 'key-3',
+            type: 'key',
+          },
+        ],
+      },
+    ],
+  };
+
+  let y = 0;
+  while (y < map.height) {
+    let x = 0;
+    y += 1;
+    while (x < map.width) {
+      x += 1;
+      let areaIndex = ((y - 1) * map.width) + ((x - 1) % map.width);
+      let area = map.areas[areaIndex];
+      let alt  = (y % 2 + x % 2) === 1 ? 'b' : 'a';
+
+      Object.assign(area, {
+        x,
+        y,
+        alt,
+      });
+    }
+  }
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title Map maker
+
+    style.
+      .prop--overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: black;
+      }
+
+  body
+    input#full-screen(type="checkbox", checked)
+    label.full-screen-toggle(for="full-screen")
+
+    .game
+      //- Controls and values values -//
+
+      //- Game values
+      each area in map.areas
+        - let areaValues = area.values || [];
+        each value in areaValues
+          -
+            let valueName = value.name || value;
+            let valueID = `value--name-${valueName}`;
+            let valueTypes = (value.type ? [value.type] : value.types) || [];
+            let valueClass = `
+              ${valueID}
+              ${valueTypes.map(type => `value--type-${type}`).join(' ')}
+            `.trim().replace(/\s+/g, ' ');
+          //- +id-check(valueID)
+          input.value(id=valueID, class=`${valueClass}`, type='checkbox')
+      //- END - Game values
+
+      //- Position values
+      for area in map.areas
+        if area.accessible !== false
+          input.position(id=`position--${area.name}`, class=`position--alt-${area.alt} position--name-${area.name} position--xy-${area.x}-${area.y}`, type="radio", name="position", checked=area.initial)
+        else
+          <!-- inaccessible area--#{area.name} -->
+      //- END - Position values
+
+      //- Direction controls
+      each area in map.areas
+        if area.accessible === false
+          <!-- inaccessible position--#{area.name} -->
+        else
+          label.direction(class=`direction--name-${area.name} direction--xy-${area.x}-${area.y}`, for=`position--${area.name}`)
+      //- END - Direction controls
+
+      //- END - Controls and values values
+
+      //- World
+      .world
+        each area in map.areas
+          if area.accessible === false
+            <!-- inaccessible position--#{area.name} -->
+          else
+            .map-block(class=`map-block--name-${area.name} map-block--xy-${area.x}-${area.y}`)
+              -
+                let areaProps = area.props || [];
+                let areaValues = area.values || [];
+
+              each prop in areaProps
+                - let propName = (prop.name || prop)
+                .prop(class=`prop--name-${propName}`)
+
+              each value in areaValues
+                - let valueName = value.name || value;
+                - let valueFor = `value--name-${valueName}`;
+                - let valueGetterID = `value-getter--name-${valueName}`;
+                - let valueTypes = value.type ? [value.type] : value.types;
+                -
+                  let valueClass = `
+                    ${valueGetterID}
+                    ${
+                      valueTypes
+                        ? valueTypes.map(type => `value-getter--type-${type}`).join(' ')
+                        : ''
+                    }
+                  `.trim().replace(/\s+/g, ' ');
+                label.value-getter(class=valueClass, type="checkbox", for=valueFor)
+
+        //- World relative props
+          //- empty
+        //- END - World relative props
+
+      //- END - World
+
+      //- Window relative props
+      each prop in map.props
+        .prop(class=`prop--name-${prop}`)
+      //- END - Window relative props
+
+    link(rel="stylesheet", href="./styles/entry.2.css")
+    link(rel="stylesheet", href="./styles/font-awesome.css")

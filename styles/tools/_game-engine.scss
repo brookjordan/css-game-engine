@@ -1,0 +1,441 @@
+@import '../variables/game-engine-variables';
+@import '../tools/contain-within-window';
+@import '../tools/strip-unit';
+
+// %direction--up {}
+// %direction--down {}
+// %direction--left {}
+// %direction--right {}
+
+@mixin build-game {
+  $world-aspect-y: strip-unit($block-width);
+  $world-aspect-x: strip-unit($block-height);
+  $world-aspect: $world-aspect-y / $world-aspect-x; // for position on canvas
+
+  $world-row-count: length($world);
+  $world-column-count: length(nth($world, length($world)));
+
+  $world-width: $world-column-count * $block-width;
+  $world-height: $world-column-count * $block-height;
+
+  $direction-alignment: (
+    up: (
+      x: $direction-width + $direction-gap-x + $direction-offset-x,
+      y: $direction-offset-y,
+    ),
+    down: (
+      x: $direction-width + $direction-gap-x + $direction-offset-x,
+      y: ($direction-height + $direction-gap-y) * 2 + $direction-offset-y,
+    ),
+    left: (
+      x: $direction-offset-x,
+      y: $direction-height + $direction-gap-y + $direction-offset-y,
+    ),
+    right: (
+      x: ($direction-width + $direction-gap-x) * 2 + $direction-offset-x,
+      y: $direction-height + $direction-gap-y + $direction-offset-y,
+    ),
+  );
+
+  @keyframes direction-down {
+    0% {
+      #{$direction-alignment-x}: -200vh;
+      #{$direction-alignment-y}: -200vw;
+    }
+    100% {
+      #{$direction-alignment-x}: map-get(map-get($direction-alignment, down), x);
+      #{$direction-alignment-y}: map-get(map-get($direction-alignment, down), y);
+    }
+  }
+
+  @keyframes direction-up {
+    0% {
+      #{$direction-alignment-x}: -200vh;
+      #{$direction-alignment-y}: -200vw;
+    }
+    100% {
+      #{$direction-alignment-x}: map-get(map-get($direction-alignment, up), x);
+      #{$direction-alignment-y}: map-get(map-get($direction-alignment, up), y);
+    }
+  }
+
+  @keyframes direction-left {
+    0% {
+      #{$direction-alignment-x}: -200vh;
+      #{$direction-alignment-y}: -200vw;
+    }
+    100% {
+      #{$direction-alignment-x}: map-get(map-get($direction-alignment, left), x);
+      #{$direction-alignment-y}: map-get(map-get($direction-alignment, left), y);
+    }
+  }
+
+  @keyframes direction-right {
+    0% {
+      #{$direction-alignment-x}: -200vh;
+      #{$direction-alignment-y}: -200vw;
+    }
+    100% {
+      #{$direction-alignment-x}: map-get(map-get($direction-alignment, right), x);
+      #{$direction-alignment-y}: map-get(map-get($direction-alignment, right), y);
+    }
+  }
+
+  #full-screen {
+    display: none;
+  }
+
+  .full-screen-toggle {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    transition: background-color 0.5s;
+
+    #full-screen:checked ~ & {
+      background-color: black;
+    }
+  }
+
+  .#{$game-class} {
+    width: $world-aspect-y * 1em;
+    height: $world-aspect-x * 1em;
+    position: relative;
+    font-size: 1px;
+    transition: width 0.2s, height 0.2s, font-size 0.2s;
+    @if not $show-outside-blocks {
+      overflow: hidden;
+    }
+
+    #full-screen:checked ~ & {
+      font-size: 100vw / $world-aspect-x / $world-aspect;
+      @include contain-over-media-query($world-aspect-y, $world-aspect-x) {
+        font-size: 100vh / $world-aspect-y * $world-aspect;
+      }
+    }
+  }
+
+  .#{$position-class} {
+    display: none;
+
+    $y: 0;
+    @each $row in $world {
+      $y: $y + 1;
+      $x: 0;
+
+      @each $point in $row {
+        $x: $x + 1;
+
+        &--xy-#{$x}-#{$y}:checked ~ .world {
+          transform:
+            translate(
+              -($x - 1) * 100% / $world-column-count,
+              -($y - 1) * 100% / $world-row-count
+            );
+        }
+      }
+    }
+  }
+
+
+  .#{$direction-class} {
+    display: block;
+    position: absolute;
+    #{$direction-alignment-x}: -200vh;
+    #{$direction-alignment-y}: -200vw;
+    z-index: 1;
+    width: $direction-width;
+    height: $direction-height;
+    //animation-fill-mode: forwards;
+    animation-duration: $default-block-transition-duration;
+    animation-timing-function: step-end;
+    cursor: pointer;
+
+    $y: 0;
+    @each $row in $world {
+      $y: $y + 1;
+      $x: 0;
+
+      @each $point in $row {
+        $x: $x + 1;
+
+        @each $direction-name, $direction in $directions {
+          $x-dir: nth($direction, 1);
+          $x-to: $x - $x-dir;
+
+          $y-dir: nth($direction, 2);
+          $y-to: $y - $y-dir;
+
+          @if $x-to > 0 and $y-to > 0 and $x-to <= $world-column-count and $y-to <= $world-row-count {
+            $to-point: nth(nth($world, $y-to), $x-to);
+
+            @if map-get($point, accessible) {
+              $required-selector: '';
+              @if map-has-key($point, requires) {
+                @each $requirement in map-get($point, requires) {
+                  $required-selector: $required-selector + if-got-selector($requirement);
+                }
+              }
+              @if map-has-key($point, requires-type) {
+                @each $requirement in map-get($point, requires-type) {
+                  $required-selector: $required-selector + if-got-type-selector(nth($requirement, 1), nth($requirement, 2));
+                }
+              }
+              #{$required-selector} .#{$position-class}--xy-#{$x-to}-#{$y-to}:checked ~ &--xy-#{$x}-#{$y} {
+                @extend %direction--#{$direction-name} !optional;
+                animation-name: direction-#{$direction-name};
+                #{$direction-alignment-x}: map-get(map-get($direction-alignment, $direction-name), x);
+                #{$direction-alignment-y}: map-get(map-get($direction-alignment, $direction-name), y);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .#{$world-class} {
+    position: absolute;
+    display: grid;
+    transform: translate(0px, 0px);
+    width: 100% * $world-column-count;
+    height: 100% * $world-row-count;
+    transition: transform $default-block-transition-duration $default-block-transition-function;
+
+    $grid-template-areas: ();
+    $grid-template-columns: ();
+    $grid-template-rows: ();
+    $grid-template-over-columns: ();
+    $grid-template-over-rows: ();
+    $y: 0;
+    @each $row in $world {
+      $y: $y + 1;
+      $x: 0;
+
+      $grid-template-row-areas: '';
+      $grid-template-rows: append($grid-template-rows, 1fr, space );
+      @each $point in $row {
+        $x: $x + 1;
+
+        @if $x > 1 {
+          $grid-template-row-areas: $grid-template-row-areas + ' ';
+        }
+        @if map-get($point, accessible) {
+          $grid-template-row-areas: $grid-template-row-areas + unquote('_' + map-get($point, name));
+        } @else {
+          $grid-template-row-areas: $grid-template-row-areas + '.';
+        }
+        @if $y == 1 {
+          $grid-template-columns: append($grid-template-columns, 1fr, space);
+        }
+      }
+      $grid-template-areas: append($grid-template-areas, quote($grid-template-row-areas), space);
+    }
+    grid-template-areas: $grid-template-areas;
+    grid-template-columns: $grid-template-columns;
+    grid-template-rows: $grid-template-rows;
+  }
+
+  .#{$block-class} {
+    $max-map-thing: length($world) + length(nth($world, length($world)));
+    $colour-start: floor(255 / $max-map-thing);
+
+    display: block;
+    position: relative;
+
+    $y: 0;
+    @each $row in $world {
+      $y: $y + 1;
+      $x: 0;
+
+      @each $point in $row {
+        $x: $x + 1;
+
+        @if map-get($point, accessible) {
+          &--xy-#{$x}-#{$y} {
+            grid-area: _#{map-get($point, name)};
+            background: map-get($point, background);
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin if-in-block-alt($type, $fixed: false) {
+  @if $fixed {
+    .position--alt-#{$type}:checked ~ & {
+      @content;
+    }
+  } @else {
+    .position--alt-#{$type}:checked ~ .world & {
+      @content;
+    }
+  }
+}
+
+@function if-got-selector($item) {
+  @return unquote('#value--name-#{$item}:checked ~ ');
+}
+
+@mixin if-got($item) {
+  #{if-got-selector($item)} .world & {
+    @content;
+  }
+}
+
+@function if-got-type-selector($item, $quantity) {
+  $selector: '';
+  @if $quantity == null {
+    $quantity: 1;
+  }
+  @for $i from 1 through $quantity {
+    $selector: $selector + '.value--type-' + $item + ':checked ~ ';
+  }
+  @return $selector;
+}
+
+@mixin if-got-type($item, $quantity) {
+  #{if-got-type-selector($item, $quantity)} .world & {
+    @content;
+  }
+}
+
+@mixin size($w: null, $h: null) {
+  @if $w != null {
+    width: $w * 1em;
+  }
+  @if $h != null {
+    height: $h * 1em;
+  }
+}
+
+@mixin pos($x: null, $y: null) {
+  @if $x != null {
+    left: $x * 1em;
+  }
+  @if $y != null {
+    top: $y * 1em;
+  }
+}
+
+@mixin align($x, $y, $w, $h) {
+  @include size($w, $h);
+  @include pos($x, $y);
+}
+
+@mixin named-element(
+  $element-type,
+  $element-name,
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null,
+) {
+  .#{$element-type}--name-#{$element-name} {
+    contain: strict;
+    @include pos($x, $y);
+    z-index: $z;
+    @include size($w, $h);
+    @content;
+  }
+}
+
+@mixin element-type(
+  $element-type,
+  $element-name,
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null,
+) {
+  .#{$element-type}--type-#{$element-name} {
+    contain: strict;
+    @include pos($x, $y);
+    z-index: $z;
+    @include size($w, $h);
+    @content;
+  }
+}
+
+@mixin value-getter(
+  $value-getter-name,
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null,
+) {
+  @include named-element(
+    value-getter,
+    $value-getter-name,
+    $w, $h, $x, $y, $z,
+  ) {
+    @content;
+  }
+}
+
+@mixin value-getter-type(
+  $value-getter-name,
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null,
+) {
+  @include element-type(
+    value-getter,
+    $value-getter-name,
+    $w, $h, $x, $y, $z,
+  ) {
+    @content;
+  }
+}
+
+@mixin prop(
+  $prop-name,
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null,
+) {
+  @include named-element(
+    prop,
+    $prop-name,
+    $w, $h, $x, $y, $z,
+  ) {
+    @content;
+  }
+}
+
+@mixin value-getter(
+  $value-getter-name,
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null,
+) {
+  @include named-element(
+    value-getter,
+    $value-getter-name,
+    $w, $h, $x, $y, $z,
+  ) {
+    @content;
+  }
+}
+
+@mixin map-block($x, $y: null) {
+  @if $y == null {
+    .map-block--name-#{$x} {
+      @content;
+    }
+  } @else {
+    .map-block--xy-#{$x}-#{$y} {
+      @content;
+    }
+  }
+}

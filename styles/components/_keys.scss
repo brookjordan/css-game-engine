@@ -1,0 +1,33 @@
+@import "../variables/game-settings";
+@import "../tools/game-engine";
+
+
+@include value-getter-type(key, $w:80, $h: 53) {
+  @include size(80, 53);
+  background-image: url('../i/key.png');
+  background-size: cover;
+  transition:
+    transform ($default-block-transition-duration / 2) cubic-bezier(.4,.0,.6,-0.6),
+    opacity ($default-block-transition-duration / 2) cubic-bezier(.4,.0,.6,-0.6);
+}
+@include value-getter(key-1, $x:110, $y: 180) {
+  @include if-got(key-1) {
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+@include value-getter(key-2, $x:250, $y: 240) {
+  @include if-got(key-2) {
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+@include value-getter(key-3, $x:34, $y: 27) {
+  @include if-got(key-3) {
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+  }
+}

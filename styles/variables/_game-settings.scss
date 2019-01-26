@@ -1,0 +1,89 @@
+$block-width: 400px;
+$block-height: 300px;
+
+$direction-width: 50em;
+$direction-height: 50em;
+$direction-gap-x: 10em;
+$direction-gap-y: 10em;
+$direction-offset-x: 225em;
+$direction-offset-y: 5em;
+$direction-alignment-x: left;
+$direction-alignment-y: top;
+
+$default-block-transition-duration: 1s;
+//$default-block-transition-function: cubic-bezier(.2,0,.7,1);
+
+$game-class: game;
+$position-class: position;
+$direction-class: direction;
+$world-class: world;
+$block-class: map-block;
+
+$show-outside-blocks: false;
+
+$required-key-count: 3;
+$world: (
+  (
+    (
+      name: '1-1',
+      accessible: true,
+    ),
+
+    (
+      name: '2-1',
+      accessible: true,
+    ),
+
+    (
+      name: '3-1',
+      accessible: true,
+    ),
+  ),
+
+  (
+    (
+      name: '1-2',
+      accessible: true,
+      // Order is important
+      // requires: (
+      //   key-1,
+      //   key-2,
+      //   key-3,
+      // ),
+      requires: trap-door,
+    ),
+
+    (
+      accessible: false,
+    ),
+
+    (
+      name: '3-2',
+      accessible: true,
+    ),
+  ),
+);
+
+%direction--up {
+  &::before {
+    content: "\f077"; // fa-chevron-up
+  }
+}
+
+%direction--down {
+  &::before {
+    content: "\f078"; // fa-chevron-down
+  }
+}
+
+%direction--left {
+  &::before {
+    content: "\f053"; // fa-chevron-left
+  }
+}
+
+%direction--right {
+  &::before {
+    content: "\f054"; // fa-chevron-right
+  }
+}

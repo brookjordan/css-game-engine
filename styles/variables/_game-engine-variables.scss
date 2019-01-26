@@ -1,0 +1,53 @@
+$directions: (
+  down: (0 1),
+  up: (0 -1),
+  right: (1 0),
+  left: (-1 0),
+);
+
+$world: (
+  (
+    (
+      name: 'top-left',
+      accessible: true,
+    ),
+
+    (
+      name: 'top-right',
+      accessible: true,
+    ),
+  ),
+
+  (
+    (
+      accessible: false,
+    ),
+
+    (
+      name: 'bottom-right',
+      accessible: true,
+    ),
+  ),
+) !default;
+
+$direction-width: 50px !default;
+$direction-height: 50px !default;
+$direction-gap-x: 10px !default;
+$direction-gap-y: 10px !default;
+$direction-offset-x: 10px !default;
+$direction-offset-y: 10px !default;
+$direction-alignment-x: left !default;
+$direction-alignment-y: top !default;
+
+$block-width: 400px !default;
+$block-height: 300px !default;
+$default-block-transition-duration: 3s !default;
+$default-block-transition-function: cubic-bezier(.2,0,.7,1) !default;
+
+$game-class: game !default;
+$position-class: position !default;
+$direction-class: direction !default;
+$world-class: world !default;
+$block-class: map-block !default;
+
+$show-outside-blocks: false !default;

@@ -1,0 +1,61 @@
+@mixin contain($aspect-y, $aspect-x) {
+  $aspect: $aspect-y / $aspect-x;
+
+  width: contained-width-under-aspect();
+  height: contained-height-under-aspect($aspect-y, $aspect-x);
+
+  @include contain-over-media-query($aspect-y, $aspect-x) {
+    width: contained-width-over-aspect($aspect-y, $aspect-x);
+    height: contained-height-over-aspect();
+  }
+}
+
+@function contained-width-under-aspect($aspect-y: null, $aspect-x: null) {
+  @return 100vw;
+}
+@function contained-height-under-aspect($aspect-y, $aspect-x) {
+  $aspect: $aspect-y / $aspect-x;
+  @return 100vw / $aspect;
+}
+@function contained-width-over-aspect($aspect-y, $aspect-x) {
+  $aspect: $aspect-y / $aspect-x;
+  @return 100vh * $aspect;
+}
+@function contained-height-over-aspect($aspect-y: null, $aspect-x: null) {
+  @return 100vh;
+}
+@mixin contain-over-media-query($aspect-y, $aspect-x) {
+  @media (min-aspect-ratio: #{$aspect-y}/#{$aspect-x}) {
+    @content;
+  }
+}
+
+@mixin min-dimensions($aspect-y, $aspect-x, $min-width: null, $min-height: null) {
+  $aspect: $aspect-y / $aspect-x;
+
+  @if $min-width == null {
+    $min-width: 0;
+  }
+
+  @if $min-height == null {
+    $min-height: 0;
+  }
+
+  min-width: max($min-width, $min-height * $aspect);
+  min-height: max($min-height, $min-width / $aspect);
+}
+
+@mixin max-dimensions($aspect-y, $aspect-x, $max-width: null, $max-height: null) {
+  $aspect: $aspect-y / $aspect-x;
+
+  @if $max-width == null {
+    $max-width: $max-height * 1e9;
+  }
+
+  @if $max-height == null {
+    $max-height: $max-width * 1e9;
+  }
+
+  max-width: min($max-width, $max-height * $aspect);
+  max-height: min($max-height, $max-width / $aspect);
+}

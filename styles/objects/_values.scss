@@ -1,0 +1,11 @@
+@import "../variables/game-settings";
+
+[id^="value--"] {
+  display: none;
+}
+
+.value-getter {
+  position: absolute;
+  cursor: pointer;
+  background: transparent no-repeat 50% 50% / contain;
+}

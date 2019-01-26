@@ -1,0 +1,25 @@
+@import "../variables/game-settings";
+
+@keyframes overlay-fade-out {
+  0% {
+    background-color: #000;
+  }
+
+  60% {
+    background-color: #444;
+    visibility: visible;
+  }
+
+  100% {
+    background-color: #fff;
+    visibility: visible;
+  }
+}
+
+@include prop(overlay) {
+  width: 100%;
+  height: 100%;
+  animation: overlay-fade-out ($default-block-transition-duration / 0.8) ease-in-out backwards;
+  mix-blend-mode: color-burn;
+  visibility: hidden;
+}

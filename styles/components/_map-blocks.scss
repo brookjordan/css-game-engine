@@ -1,0 +1,25 @@
+@import '../tools/game-engine';
+
+.map-block {
+  background-size: cover;
+  perspective: 1000px;
+}
+
+@include map-block(unquote('1-1')) {
+  background-image: url('../i/ladder-down-room.jpg');
+}
+@include map-block(unquote('2-1')) {
+  background-image: url('../i/empty-room.jpg');
+}
+@include map-block(unquote('3-1')) {
+  background-image: url('../i/ladder-down-room.jpg');
+}
+
+@include map-block(unquote('1-2')) {
+  background-image: url('../i/ladder-up-room.jpg');
+}
+@include map-block(unquote('3-2')) {
+  background-image: url('../i/key-room.jpg');
+}
+
+

@@ -1,0 +1,9 @@
+@import "../variables/game-settings";
+
+.prop {
+  position: absolute;
+  background: transparent no-repeat 50% 50% / contain;
+  transition:
+    transform ($default-block-transition-duration / 2) ($default-block-transition-duration / 2) ease-in,
+    opacity ($default-block-transition-duration / 2) ($default-block-transition-duration / 2) ease-in;
+}

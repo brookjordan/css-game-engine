@@ -1,0 +1,55 @@
+@import "../variables/game-settings";
+@import "../tools/game-engine";
+
+@keyframes character-bob--a {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
+    transform: scaleY(1);
+  }
+
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: scaleY(0.9);
+  }
+}
+
+@keyframes character-bob--b {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
+    transform: scaleY(1);
+  }
+
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: scaleY(0.9);
+  }
+}
+
+@include prop(character, $w:40, $h:100, $x:145, $y:140) {
+  background-image: url('../i/character.png');
+  transform-origin: 50% 84em;
+
+  @include if-in-block-alt(a, $fixed: true) {
+    animation: character-bob--a $default-block-transition-duration ease-in-out;
+  }
+
+  @include if-in-block-alt(b, $fixed: true) {
+    animation: character-bob--b $default-block-transition-duration ease-in-out;
+  }
+}

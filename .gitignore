@@ -57,5 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-# next.js build output
-.next
+# compiled files - will probably be more specific in future
+fonts
+*.html
+*.css
+*.css.map
+
