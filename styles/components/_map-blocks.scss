@@ -5,20 +5,20 @@
   perspective: 1000px;
 }
 
-@include map-block(unquote('1-1')) {
+@include map-block(unquote('entrance')) {
   background-image: url('../i/ladder-down-room.jpg');
 }
-@include map-block(unquote('2-1')) {
+@include map-block(unquote('first-key')) {
   background-image: url('../i/empty-room.jpg');
 }
-@include map-block(unquote('3-1')) {
+@include map-block(unquote('first-ladder')) {
   background-image: url('../i/ladder-down-room.jpg');
 }
 
-@include map-block(unquote('1-2')) {
+@include map-block(unquote('exit')) {
   background-image: url('../i/ladder-up-room.jpg');
 }
-@include map-block(unquote('3-2')) {
+@include map-block(unquote('last-key')) {
   background-image: url('../i/key-room.jpg');
 }
 

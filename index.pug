@@ -8,7 +8,7 @@
     ],
     areas: [
       {
-        name: '1-1',
+        name: 'entrance',
         initial: true,
         values: [
           {
@@ -24,7 +24,7 @@
         ]
       },
       {
-        name: '2-1',
+        name: 'first-key',
         values: [
           {
             name: 'key-2',
@@ -33,17 +33,14 @@
         ],
       },
       {
-        name: '3-1',
+        name: 'first-ladder',
       },
       {
-        name: '1-2',
+        name: 'exit',
       },
+      null,
       {
-        name: '2-2',
-        accessible: false,
-      },
-      {
-        name: '3-2',
+        name: 'last-key',
         values: [
           {
             name: 'key-3',
@@ -54,24 +51,7 @@
     ],
   };
 
-  let y = 0;
-  while (y < map.height) {
-    let x = 0;
-    y += 1;
-    while (x < map.width) {
-      x += 1;
-      let areaIndex = ((y - 1) * map.width) + ((x - 1) % map.width);
-      let area = map.areas[areaIndex];
-      let alt  = (y % 2 + x % 2) === 1 ? 'b' : 'a';
-
-      Object.assign(area, {
-        x,
-        y,
-        alt,
-      });
-    }
-  }
-
+-
   let spriteNames = [];
   function nameSprite(name) {
     if (spriteNames.includes(name)) {
@@ -116,6 +96,25 @@
     return a.map((a, i) => a + (b[i] || '')).join('').trim().replace(/\s+/g, ' ');
   }
 
+  let y = 0;
+  while (y < map.height) {
+    let x = 0;
+    y += 1;
+    while (x < map.width) {
+      x += 1;
+      let areaIndex = ((y - 1) * map.width) + ((x - 1) % map.width);
+      let area = map.areas[areaIndex];
+      if (!area) { continue; }
+      let alt  = (y % 2 + x % 2) === 1 ? 'b' : 'a';
+
+      Object.assign(area, {
+        x,
+        y,
+        alt,
+      });
+    }
+  }
+
 doctype html
 html(lang="en")
   head
@@ -132,29 +131,30 @@ html(lang="en")
 
       //- Game values
       each area in map.areas
-        - let areaValues = area.values || [];
-        each value in areaValues
-          -
-            let valueName = value.name || value;
-            let valueID = newID(`value--${valueName}`);
-            let valueTypes = (value.type ? [value.type] : value.types) || [];
-            let valueClass = trim`
-              value--name-${valueName}
-              ${valueTypes.map(type => `value--type-${type}`).join(' ')}
-            `;
-          input.value(id=valueID, class=`${valueClass}`, type='checkbox')
+        if area
+          - let areaValues = area.values || [];
+          each value in areaValues
+            -
+              let valueName = value.name || value;
+              let valueID = newID(`value--${valueName}`);
+              let valueTypes = (value.type ? [value.type] : value.types) || [];
+              let valueClass = trim`
+                value--name-${valueName}
+                ${valueTypes.map(type => `value--type-${type}`).join(' ')}
+              `;
+            input.value(id=valueID, class=`${valueClass}`, type='checkbox')
       //- END - Game values
 
       //- Position values
       for area in map.areas
-        if area.accessible !== false
+        if area && area.accessible !== false
           - let positionID = newID(`position--${area.name}`);
           input.position(id=positionID, class=`position--name-${area.name} position--xy-${area.x}-${area.y}`, type="radio", name="position", checked=area.initial)
       //- END - Position values
 
       //- Direction controls
       each area in map.areas
-        if area.accessible !== false
+        if area && area.accessible !== false
           label.direction(class=`direction--name-${area.name} direction--xy-${area.x}-${area.y}`, for=`position--${area.name}`)
       //- END - Direction controls
 
@@ -163,33 +163,34 @@ html(lang="en")
       //- World
       .world
         each area in map.areas
-          if area.accessible === false
-            <!-- inaccessible position--#{area.name} -->
-          else
-            .map-block(class=`map-block--name-${area.name} map-block--xy-${area.x}-${area.y}`)
-              -
-                let areaProps = area.props || [];
-                let areaValues = area.values || [];
-
-              each prop in areaProps
-                - let propName = (prop.name || prop)
-                .prop.sprite(class=`${nameSprite(propName)} ${nameProp(propName)}`)
-
-              each value in areaValues
+          if area
+            if area.accessible === false
+              <!-- inaccessible position--#{area.name} -->
+            else
+              .map-block(class=`map-block--name-${area.name} map-block--xy-${area.x}-${area.y}`)
                 -
-                  let valueName = value.name || value;
-                  let valueFor = `value--${valueName}`;
-                  let valueTypes = value.type ? [value.type] : value.types;
-                  let valueClass = trim`
-                    ${nameSprite(valueName)}
-                    ${nameValueGetter(valueName)}
-                    ${
-                      valueTypes
-                        ? valueTypes.map(type => `value-getter--type-${type}`).join(' ')
-                        : ''
-                    }
-                  `;
-                label.value-getter.sprite(class=valueClass, type="checkbox", for=valueFor)
+                  let areaProps = area.props || [];
+                  let areaValues = area.values || [];
+
+                each prop in areaProps
+                  - let propName = (prop.name || prop)
+                  .prop.sprite(class=`${nameSprite(propName)} ${nameProp(propName)}`)
+
+                each value in areaValues
+                  -
+                    let valueName = value.name || value;
+                    let valueFor = `value--${valueName}`;
+                    let valueTypes = value.type ? [value.type] : value.types;
+                    let valueClass = trim`
+                      ${nameSprite(valueName)}
+                      ${nameValueGetter(valueName)}
+                      ${
+                        valueTypes
+                          ? valueTypes.map(type => `value-getter--type-${type}`).join(' ')
+                          : ''
+                      }
+                    `;
+                  label.value-getter.sprite(class=valueClass, type="checkbox", for=valueFor)
 
       //- World relative props
       //- empty
