@@ -1,0 +1,10 @@
+-
+  let valueGetterNames = [];
+  function nameValueGetter(name) {
+    if (valueGetterNames.includes(name)) {
+      console.warn(`There are multiple value-getters being created with the name of: "${name}"`);
+    } else {
+      valueGetterNames.push(name);
+    }
+    return `value-getter--name-${name}`;
+  }

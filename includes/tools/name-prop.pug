@@ -1,0 +1,10 @@
+-
+  let propNames = [];
+  function nameProp(name) {
+    if (propNames.includes(name)) {
+      console.warn(`There are multiple props being created with the name of: "${name}"`);
+    } else {
+      propNames.push(name);
+    }
+    return `prop--name-${name}`;
+  }

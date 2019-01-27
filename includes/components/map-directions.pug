@@ -1,0 +1,4 @@
+mixin print-map-directions(map)
+  each area in map.areas
+    if area && area.accessible !== false
+      label.direction(class=`direction--name-${area.name} direction--xy-${area.x}-${area.y}`, for=`position--${area.name}`)

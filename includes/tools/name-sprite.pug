@@ -1,0 +1,10 @@
+-
+  let spriteNames = [];
+  function nameSprite(name) {
+    if (spriteNames.includes(name)) {
+      console.warn(`There are multiple sprites being created with the name of: "${name}"`);
+    } else {
+      spriteNames.push(name);
+    }
+    return `sprite--${name}`;
+  }

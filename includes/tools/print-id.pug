@@ -1,0 +1,10 @@
+-
+  let usedIDs = [];
+  function printID(id) {
+    if (usedIDs.includes(id)) {
+      throw new Error(`There were multiple IDs being created of: "${id}"`);
+    } else {
+      usedIDs.push(id);
+    }
+    return id;
+  }

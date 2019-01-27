@@ -1,0 +1,4 @@
+-
+  function trim(a, ...b) {
+    return a.map((a, i) => a + (b[i] || '')).join('').trim().replace(/\s+/g, ' ');
+  }

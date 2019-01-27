@@ -1,0 +1,27 @@
+mixin print-map-blocks(map)
+  each area in map.areas
+    if area && area.accessible !== false
+      .map-block(class=`map-block--name-${area.name} map-block--xy-${area.x}-${area.y}`)
+        -
+          let areaProps = area.props || [];
+          let areaValues = area.values || [];
+
+        each prop in areaProps
+          - let propName = (prop.name || prop)
+          .prop.sprite(class=`${nameSprite(propName)} ${nameProp(propName)}`)
+
+        each value in areaValues
+          -
+            let valueName = value.name || value;
+            let valueFor = `value--${valueName}`;
+            let valueTypes = value.type ? [value.type] : value.types;
+            let valueClass = trim`
+              ${nameSprite(valueName)}
+              ${nameValueGetter(valueName)}
+              ${
+                valueTypes
+                  ? valueTypes.map(type => `value-getter--type-${type}`).join(' ')
+                  : ''
+              }
+            `;
+          label.value-getter.sprite(class=valueClass, type="checkbox", for=valueFor)

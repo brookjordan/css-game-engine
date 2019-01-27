@@ -1,0 +1,54 @@
+-
+  const map = {
+    width: 3,
+    height: 2,
+    fullScreen: true,
+    title: 'Digging deeper',
+    windowProps: [
+      'character',
+      'overlay',
+    ],
+    areas: [
+      {
+        name: 'entrance',
+        initial: true,
+        values: [
+          {
+            name: 'key-1',
+            type: 'key',
+          },
+          'trap-door',
+        ],
+        props: [
+          'green-lock',
+          'blue-lock',
+          'red-lock',
+        ]
+      },
+      {
+        name: 'first-key',
+        values: [
+          {
+            name: 'key-2',
+            type: 'key',
+          },
+        ],
+      },
+      {
+        name: 'first-ladder',
+      },
+      {
+        name: 'exit',
+      },
+      null,
+      {
+        name: 'last-key',
+        values: [
+          {
+            name: 'key-3',
+            type: 'key',
+          },
+        ],
+      },
+    ],
+  };

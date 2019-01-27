@@ -1,0 +1,5 @@
+mixin print-world-relative-props(map)
+  if map.worldProps
+    each prop in map.worldProps
+      - let propName = prop.name || prop;
+      .prop.sprite(class=`${nameSprite(propName)} ${nameProp(propName)}`)

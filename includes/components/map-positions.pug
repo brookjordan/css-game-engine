@@ -1,0 +1,5 @@
+mixin print-map-positions(map)
+  for area in map.areas
+    if area && area.accessible !== false
+      - let positionID = `position--${area.name}`;
+      input.position(id=printID(positionID), class=`position--name-${area.name} position--alt-${area.alt} position--xy-${area.x}-${area.y}`, type="radio", name="position", checked=area.initial)

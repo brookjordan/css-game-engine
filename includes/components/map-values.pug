@@ -1,0 +1,14 @@
+mixin print-map-values(map)
+  each area in map.areas
+    if area
+      - let areaValues = area.values || [];
+      each value in areaValues
+        -
+          let valueName = value.name || value;
+          let valueID = `value--${valueName}`;
+          let valueTypes = (value.type ? [value.type] : value.types) || [];
+          let valueClass = trim`
+            value--name-${valueName}
+            ${valueTypes.map(type => `value--type-${type}`).join(' ')}
+          `;
+        input.value(id=printID(valueID), class=`${valueClass}`, type='checkbox')
