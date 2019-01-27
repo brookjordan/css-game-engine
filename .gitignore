@@ -62,4 +62,5 @@ fonts
 *.html
 *.css
 *.css.map
+.vscode
 
