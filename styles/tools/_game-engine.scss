@@ -274,29 +274,26 @@
   }
 }
 
-@function if-got-selector($item) {
-  @return unquote('#value--#{$item}:checked ~ ');
+@function if-got-selector($value) {
+  @return unquote('#value--#{$value}:checked ~ ');
 }
 
-@mixin if-got($item) {
-  #{if-got-selector($item)} .world & {
+@mixin if-got($value) {
+  #{if-got-selector($value)} .world & {
     @content;
   }
 }
 
-@function if-got-type-selector($item, $quantity) {
+@function if-got-type-selector($value-type, $quantity: 1) {
   $selector: '';
-  @if $quantity == null {
-    $quantity: 1;
-  }
   @for $i from 1 through $quantity {
-    $selector: $selector + '.value--type-' + $item + ':checked ~ ';
+    $selector: $selector + '.value--type-' + $value-type + ':checked ~ ';
   }
   @return $selector;
 }
 
-@mixin if-got-type($item, $quantity) {
-  #{if-got-type-selector($item, $quantity)} .world & {
+@mixin if-got-type($value-type, $quantity: 1) {
+  #{if-got-type-selector($value-type, $quantity)} .world & {
     @content;
   }
 }
@@ -319,9 +316,16 @@
   }
 }
 
-@mixin align($x, $y, $w, $h) {
+@mixin align(
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null
+) {
   @include size($w, $h);
   @include pos($x, $y);
+  z-index: $z;
 }
 
 @mixin named-element(
@@ -428,8 +432,12 @@
   }
 }
 
-@mixin map-block($x, $y: null) {
-  @if $y == null {
+@mixin map-block($x: null, $y: null, $name: null) {
+  @if $name != null {
+    .map-block--name-#{$name} {
+      @content;
+    }
+  } @else if $y == null {
     .map-block--name-#{$x} {
       @content;
     }

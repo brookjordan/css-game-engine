@@ -33,7 +33,7 @@
 
 .value-getter {
   &--name-trap-door {
-    @include align(105, 242, 161, 84.5);
+    @include align(161, 84.5, 105, 242);
     background-image: url('../i/trap-door.png');
     transition-delay: 0;
     pointer-events: none;
