@@ -71,6 +71,7 @@ Style a named value-getter.
 
 This can be used with some sugar properties to make sizing and positioning easier.
 
+#### parameters
 Name | Type | Default | Description
 -- | -- | -- | --
 `$name` | unquoted string | *required* | The name of the value-getter
@@ -101,6 +102,7 @@ Style all value-getter-sprites of a given value-type.
 
 This can be used with some sugar properties to make sizing and positioning easier.
 
+#### parameters
 Name | Type | Default | Description
 -- | -- | -- | --
 `$name` | unquoted string | *required* | The type of the value-getter
