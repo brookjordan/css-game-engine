@@ -63,5 +63,5 @@ fonts
 *.css
 *.css.map
 .vscode
-./package.json
+package.json
 
