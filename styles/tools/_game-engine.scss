@@ -275,7 +275,7 @@
 }
 
 @function if-got-selector($item) {
-  @return unquote('#value--name-#{$item}:checked ~ ');
+  @return unquote('#value--#{$item}:checked ~ ');
 }
 
 @mixin if-got($item) {

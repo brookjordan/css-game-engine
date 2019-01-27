@@ -72,22 +72,57 @@
     }
   }
 
+  let spriteNames = [];
+  function nameSprite(name) {
+    if (spriteNames.includes(name)) {
+      console.warn(`There are multiple sprites being created with the name of: "${name}"`);
+    } else {
+      spriteNames.push(name);
+    }
+    return `sprite--${name}`;
+  }
+
+  let propNames = [];
+  function nameProp(name) {
+    if (propNames.includes(name)) {
+      console.warn(`There are multiple props being created with the name of: "${name}"`);
+    } else {
+      propNames.push(name);
+    }
+    return `prop--name-${name}`;
+  }
+
+  let valueGetterNames = [];
+  function nameValueGetter(name) {
+    if (valueGetterNames.includes(name)) {
+      console.warn(`There are multiple value-getters being created with the name of: "${name}"`);
+    } else {
+      valueGetterNames.push(name);
+    }
+    return `value-getter--name-${name}`;
+  }
+
+  let usedIDs = [];
+  function newID(id) {
+    if (usedIDs.includes(id)) {
+      throw new Error(`There were multiple IDs being created of: "${id}"`);
+    } else {
+      usedIDs.push(id);
+    }
+    return id;
+  }
+
+  function trim(a, ...b) {
+    return a.map((a, i) => a + (b[i] || '')).join('').trim().replace(/\s+/g, ' ');
+  }
+
 doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
-    title Map maker
-
-    style.
-      .prop--overlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: black;
-      }
-
+    title CSS Game Engine
   body
     input#full-screen(type="checkbox", checked)
     label.full-screen-toggle(for="full-screen")
@@ -101,29 +136,25 @@ html(lang="en")
         each value in areaValues
           -
             let valueName = value.name || value;
-            let valueID = `value--name-${valueName}`;
+            let valueID = newID(`value--${valueName}`);
             let valueTypes = (value.type ? [value.type] : value.types) || [];
-            let valueClass = `
-              ${valueID}
+            let valueClass = trim`
+              value--name-${valueName}
               ${valueTypes.map(type => `value--type-${type}`).join(' ')}
-            `.trim().replace(/\s+/g, ' ');
-          //- +id-check(valueID)
+            `;
           input.value(id=valueID, class=`${valueClass}`, type='checkbox')
       //- END - Game values
 
       //- Position values
       for area in map.areas
         if area.accessible !== false
-          input.position(id=`position--${area.name}`, class=`position--alt-${area.alt} position--name-${area.name} position--xy-${area.x}-${area.y}`, type="radio", name="position", checked=area.initial)
-        else
-          <!-- inaccessible area--#{area.name} -->
+          - let positionID = newID(`position--${area.name}`);
+          input.position(id=positionID, class=`position--name-${area.name} position--xy-${area.x}-${area.y}`, type="radio", name="position", checked=area.initial)
       //- END - Position values
 
       //- Direction controls
       each area in map.areas
-        if area.accessible === false
-          <!-- inaccessible position--#{area.name} -->
-        else
+        if area.accessible !== false
           label.direction(class=`direction--name-${area.name} direction--xy-${area.x}-${area.y}`, for=`position--${area.name}`)
       //- END - Direction controls
 
@@ -142,33 +173,34 @@ html(lang="en")
 
               each prop in areaProps
                 - let propName = (prop.name || prop)
-                .prop(class=`prop--name-${propName}`)
+                .prop.sprite(class=`${nameSprite(propName)} ${nameProp(propName)}`)
 
               each value in areaValues
-                - let valueName = value.name || value;
-                - let valueFor = `value--name-${valueName}`;
-                - let valueGetterID = `value-getter--name-${valueName}`;
-                - let valueTypes = value.type ? [value.type] : value.types;
                 -
-                  let valueClass = `
-                    ${valueGetterID}
+                  let valueName = value.name || value;
+                  let valueFor = `value--${valueName}`;
+                  let valueTypes = value.type ? [value.type] : value.types;
+                  let valueClass = trim`
+                    ${nameSprite(valueName)}
+                    ${nameValueGetter(valueName)}
                     ${
                       valueTypes
                         ? valueTypes.map(type => `value-getter--type-${type}`).join(' ')
                         : ''
                     }
-                  `.trim().replace(/\s+/g, ' ');
-                label.value-getter(class=valueClass, type="checkbox", for=valueFor)
+                  `;
+                label.value-getter.sprite(class=valueClass, type="checkbox", for=valueFor)
 
-        //- World relative props
-          //- empty
-        //- END - World relative props
+      //- World relative props
+      //- empty
+      //- END - World relative props
 
       //- END - World
 
       //- Window relative props
       each prop in map.props
-        .prop(class=`prop--name-${prop}`)
+        - let propName = prop.name || prop;
+        .prop.sprite(class=`${nameSprite(propName)} ${nameProp(propName)}`)
       //- END - Window relative props
 
     link(rel="stylesheet", href="./styles/entry.2.css")
