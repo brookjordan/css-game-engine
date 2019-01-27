@@ -149,7 +149,7 @@ html(lang="en")
       for area in map.areas
         if area && area.accessible !== false
           - let positionID = newID(`position--${area.name}`);
-          input.position(id=positionID, class=`position--name-${area.name} position--xy-${area.x}-${area.y}`, type="radio", name="position", checked=area.initial)
+          input.position(id=positionID, class=`position--name-${area.name} position--alt-${area.alt} position--xy-${area.x}-${area.y}`, type="radio", name="position", checked=area.initial)
       //- END - Position values
 
       //- Direction controls
@@ -204,5 +204,5 @@ html(lang="en")
         .prop.sprite(class=`${nameSprite(propName)} ${nameProp(propName)}`)
       //- END - Window relative props
 
-    link(rel="stylesheet", href="./styles/entry.2.css")
+    link(rel="stylesheet", href="./styles/entry.css")
     link(rel="stylesheet", href="./styles/font-awesome.css")
