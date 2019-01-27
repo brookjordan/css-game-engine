@@ -11,13 +11,15 @@
     transform: scaleY(1);
   }
 
-
   10%,
-  30%,
   50%,
-  70%,
   90% {
-    transform: scaleY(0.9);
+    transform: scaleY(0.9) skewX(5deg);
+  }
+
+  30%,
+  70% {
+    transform: scaleY(0.9) skewX(-5deg);
   }
 }
 
@@ -31,13 +33,15 @@
     transform: scaleY(1);
   }
 
-
   10%,
-  30%,
   50%,
-  70%,
   90% {
-    transform: scaleY(0.9);
+    transform: scaleY(0.9) skewX(-5deg);
+  }
+
+  30%,
+  70% {
+    transform: scaleY(0.9) skewX(5deg);
   }
 }
 
