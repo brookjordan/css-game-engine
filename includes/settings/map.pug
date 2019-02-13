@@ -1,9 +1,12 @@
+include ../settings/talking-box-dialogue
+
 -
   const map = {
     width: 3,
     height: 2,
     fullScreen: true,
     title: 'Digging deeper',
+    useInventory: true,
     windowProps: [
       'character',
       'overlay',
@@ -39,6 +42,9 @@
       },
       {
         name: 'exit',
+        conversations: [
+          talkingBoxDialogue,
+        ],
       },
       null,
       {

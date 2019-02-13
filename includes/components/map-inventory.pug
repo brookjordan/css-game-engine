@@ -1,0 +1,7 @@
+mixin print-inventory(map)
+  if map.useInventory
+    input#inventory-open(type="checkbox")
+    .inventory
+      label.inventory__toggle(for="inventory")
+      .inventory__container
+        .inventory__contents
