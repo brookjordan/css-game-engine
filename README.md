@@ -17,6 +17,188 @@ Open `index.html` in your favourite (up-to-date) browser.
 
 
 
+## `world` object
+
+The [`world` object](#world-object) is where the world's props, logic and map is decalred.
+
+It contains the following properties:
+
+
+
+### `title`
+
+#### `{string}`
+
+The title of the game. Shown in the browser window/tab.
+
+
+
+### `fullScreen`
+
+#### `{boolean}` = `false`
+
+Whether the game is initialised in full-screen mode.
+
+If false then the game will be displayed at the pixel size defined by [`width`](#width) and [`height`](#height).
+
+
+
+### `useInventory`
+
+#### `{boolean|inventory}` = `false`
+
+Set this to `true` or an [`inventory` object](#inventory-object) if you want your game to use the built-in inventory system.
+
+This allows [`item`](#item-object)s to be picked up, used, equipped and dropped.
+
+
+
+### `windowProps`
+
+#### `{prop[]}` = `[]`
+
+An array of `string`s and/or [`prop object`](#prop-object)s to be included relative to the window.
+
+By default, these will appear to float in front of the map, following as the player navigates.
+
+
+
+### `worldProps`
+
+#### `{prop[]}` = `[]`
+
+An array of `string`s and/or [`prop object`](#prop-object)s to be included relative to the world.
+
+These props are positioned relative to the entire game world rather than any particular block.
+
+This is for creating elements which can travel between rooms, but can be unweildy to control and maintain.
+
+
+
+### `areas`
+
+#### `{(string|area)[]}` = `[]`
+
+An array of `string`s and/or [`area` object](#area-object)s.
+
+These contain the data for each of the map's areas.
+
+This is a one dimensional array and is turned into a grid based on the [`width`](#width) and [`height`](#height) parameters.
+
+
+
+### `width`
+
+#### `{integer}` = `3`
+
+The number of areas the map spans horizontally.
+
+
+
+### `height`
+
+#### `{integer}` = `2`
+
+The number of areas the map spans vertically.
+
+
+
+
+## `inventory` object
+
+Hello
+
+
+
+
+## `area` object
+
+An object containing data about an area or `null`.
+
+A `null` area object will create an inaccessible area.
+
+An area has the following properties:
+
+
+
+### `name`
+
+#### `{string}`
+
+The internal name of the area.
+
+Should be unique, start with a letter and contain only letters, numbers and `-`s.
+
+
+
+### `initial`
+
+#### `{boolean}` = `false`
+
+Whether this is the area where the game begins.
+
+The last area with `initial` set to true will be where the game begins.
+
+Setting more than one of the [`areas`](#areas) to `initial` could cause problems in some browsers.
+
+
+
+### `values`
+
+#### `{(string|value)[]}` = `[]`
+
+An array of `string`s and/or [`value` object](#value-object)s that appear in this area.
+
+A value may be collected or switched on and off, but don't appear in the default inventory.
+
+
+
+### `props`
+
+#### `{(string|prop)[]}` = `[]`
+
+An array of `string`s and/or [`prop` object](#prop-object)s that appear in this area.
+
+
+
+### `items`
+
+#### `{(string|item)[]}` = `[]`
+
+An array of `string`s and/or [`item` object](#item-object)s that appear in this area.
+
+
+
+
+## `value` object
+
+#### `{string|object}`
+
+Hello
+
+
+
+
+## `prop` object
+
+#### `{string|object}`
+
+Hello
+
+
+
+
+## `item` object
+
+#### `{string|object}`
+
+Hello
+
+
+
+
+
+
 ## SCSS Mixins
 
 Most of your game creation will happen in here.
