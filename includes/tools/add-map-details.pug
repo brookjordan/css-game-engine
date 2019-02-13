@@ -1,5 +1,12 @@
 -
   let y = 0;
+  const items = [];
+  const props = [];
+  const values = [];
+
+  map.windowProps || (map.windowProps = []);
+  map.worldProps || (map.worldProps = []);
+  
   while (y < map.height) {
     let x = 0;
     y += 1;
@@ -7,13 +14,53 @@
       x += 1;
       let areaIndex = ((y - 1) * map.width) + ((x - 1) % map.width);
       let area = map.areas[areaIndex];
-      if (!area) { continue; }
+      if (!area) {
+        map.areas[areaIndex] = { accessible: false };
+        continue;
+      }
       let alt  = (y % 2 + x % 2) === 1 ? 'b' : 'a';
+
+      area.items = (area.items || []).map(item => typeof item === 'string' ? { name: item } : item);
+      area.items && area.items.forEach(item => {
+        addValue(item, items);
+      });
+
+      area.props = (area.props || []).map(prop => typeof prop === 'string' ? { name: prop } : prop);
+      area.props && area.props.forEach(prop => {
+        addValue(prop, props);
+      });
+
+      area.values = (area.values || []).map(value => typeof value === 'string' ? { name: value } : value);
+      area.values && area.values.forEach(value => {
+        addValue(value, values);
+      });
 
       Object.assign(area, {
         x,
         y,
         alt,
+        items: area.items || [],
+        props: area.props || [],
+        values: area.values || [],
       });
     }
+  }
+
+  Object.assign(map, {
+    items,
+    props,
+    values,
+  });
+
+  function addValue(value, arr) {
+    if (nameExists(value, items)) {
+      throw new Error(`The value "${value.name || value}" has been repeated.`);
+    }
+    arr.push(value);
+  }
+
+  function nameExists(ref, arr) {
+    return arr.map(i => i.name || i).indexOf((ref.name || ref)) === -1
+      ? false
+      : true;
   }
