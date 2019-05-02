@@ -1,9 +1,10 @@
-@import "elements/meyer-resets";
-@import "elements/bj-resets";
+@import "elements/resets";
 @import "elements/base";
 
 @import "objects/props";
+@import "objects/items";
 @import "objects/values";
+@import "objects/posessions";
 
 @import "components/dialogue";
 @import "components/game--key-hunter";

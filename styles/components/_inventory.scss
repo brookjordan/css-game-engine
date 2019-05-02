@@ -3,49 +3,62 @@
 }
 
 .inventory {
+  $contents-width: 1.2em;
+
   position: absolute;
   left: 100%;
   top: 50%;
   z-index: 1;
   transform: translateY(-50%) translateX(0);
-  transition: transform 0.2s ease-in-out;
+  transition: transform .2s ease-in-out;
 
   &__toggle {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     right: 100%;
     top: 50%;
     transform: translateY(-50%);
-    width: 15em;
-    height: 30em;
-    line-height: 30em;
-    text-align: center;
-    color: #937d45;
-    text-shadow: 0 2em #4d3c31;
+    width: .15em;
+    height: .30em;
     background: #675542;
-    box-shadow: 0 1em 0 2em #4d3c31;
-    border-radius: 4em 0 0 4em;
+    box-shadow: 0 .01em 0 .02em #4d3c31;
+    border-radius: .04em 0 0 .04em;
 
     &::after {
       content: "\f053"; // fa-chevron-left
       display: block;
+      line-height: .30em;
+      text-align: center;
+      color: #937d45;
+      text-shadow: 0 .02em #4d3c31;
       font-family: FontAwesome;
-      font-size: 15em;
+      font-size: 0.15em;
     }
   }
 
   &__container {
     position: relative;
     background: #675542;
-    padding: 4em;
+    padding: .04em;
     padding-right: 0;
-    border-radius: 4em 0 0 4em;
+    border-radius: .04em 0 0 .04em;
   }
 
   &__contents {
+    $item-count: 3;
+    $item-gap: .05em;
+    $item-width: ($contents-width - ($item-gap * ($item-count + 1))) / $item-count;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, $item-width);
+    grid-auto-rows: $item-width;
+    grid-gap: $item-gap;
     background: #4d3c31;
-    width: 120em;
-    height: 170em;
+    width: $contents-width;
+    height: 1.70em;
+    padding: $item-gap;
   }
 
   :checked + & {
@@ -54,7 +67,7 @@
 
   :checked + & & {
     &__container {
-      box-shadow: 0 1em 0 2em #4d3c31;
+      box-shadow: 0 .01em 0 .02em #4d3c31;
     }
 
     &__toggle::after {

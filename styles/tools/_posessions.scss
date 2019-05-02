@@ -1,0 +1,8 @@
+@mixin posessions-collected {
+  display: block;
+}
+
+@mixin posessions-active {
+  transform: translateY(-.01em);
+  box-shadow: 0 0 0 .015em red;
+}

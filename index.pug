@@ -3,6 +3,7 @@ include includes/settings/map
 include includes/tools/trim
 include includes/tools/name-prop
 include includes/tools/name-value-getter
+include includes/tools/name-item-getter
 include includes/tools/name-sprite
 include includes/tools/add-map-details
 include includes/tools/print-id
@@ -14,6 +15,7 @@ include includes/components/map-blocks
 include includes/components/map-world-props
 include includes/components/map-window-props
 include includes/components/map-inventory
+include includes/components/map-items
 include includes/components/full-screen-toggle
 
 doctype html
@@ -24,11 +26,14 @@ html(lang="en")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
     meta(name="apple-mobile-web-app-capable", content="yes")
     title #{map.title || 'CSS Game Engine'}
+    link(rel="stylesheet", href="./styles/entry.css")
+
   body
     +full-screen-toggle(map)
 
     .game
       +print-map-values(map)
+      +print-map-items(map)
       +print-map-positions(map)
       +print-map-directions(map)
       .world
@@ -37,5 +42,4 @@ html(lang="en")
       +print-inventory(map)
       +print-window-relative-props(map)
 
-    link(rel="stylesheet", href="./styles/entry.css")
     link(rel="stylesheet", href="./styles/font-awesome.css")

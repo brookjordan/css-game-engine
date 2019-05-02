@@ -1,9 +1,17 @@
 @import "../variables/game-settings";
 
 %direction {
-  display: inline-block;
-  font: normal normal normal 14px/1 FontAwesome;
-  font-size: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // font: normal normal normal 14px/1 FontAwesome;
+  //font-style: normal;
+  font-variant: normal;
+  //font-weight: normal;
+  //font-size: 14px;
+  //line-height: 1;
+  font-family: FontAwesome;
+  font-size: 1em;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -11,15 +19,15 @@
 
 .direction {
   @extend %direction;
-  line-height: $direction-height;
   text-align: center;
-  border-radius: 10em;
+  border-radius: 0.10em;
   background: #675542;
-  color: #937d45;
-  text-shadow: 0 2em #4d3c31;
-  box-shadow: 0 1em 0 2em #4d3c31;
+  box-shadow: 0 0.01em 0 0.02em #4d3c31;
 
   &::before {
-    font-size: 20em;
+    line-height: $direction-height;
+    font-size: .2em;
+    color: #937d45;
+    text-shadow: 0 0.02em #4d3c31;
   }
 }

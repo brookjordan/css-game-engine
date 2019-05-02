@@ -1,0 +1,4 @@
+@mixin items-collected {
+  transform: scale(0);
+  pointer-events: none;
+}
