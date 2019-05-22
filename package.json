@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "install": "npm install -g sass pug-cli",
+    "server-build": "npm run install && npm run build",
+    "test-html": "pug index.pug --pretty",
+    "test-css": "sass ./styles/entry.scss ./styles/entry.css",
+    "test": "npm run test-css && npm run test-html",
+    "build-html": "pug index.pug",
+    "build-css": "sass --style=compressed ./styles/entry.scss ./styles/entry.css",
+    "build": "npm run build-css && npm run build-html"
+  }
+}
