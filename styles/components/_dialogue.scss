@@ -30,6 +30,11 @@ $transition-duration: 0.1s;
   top: 2.05em;
   left: 2.25em;
 
+  label {
+    display: flex;
+    cursor: pointer;
+  }
+
   > label,
   > input,
   > div {
@@ -37,19 +42,16 @@ $transition-duration: 0.1s;
     animation: none;
   }
 
-  label {
-    cursor: pointer;
-  }
-
   span {
     font-size: 0.12em;
+    line-height: 1.4;
   }
 
   > div {
     flex-direction: column;
     position: absolute;
     bottom: calc(100% + 0.2em);
-    width: 2em;
+    width: 1.4em;
     max-width: max-content;
     padding: 0.1em 0.15em;
     color: #8b1cad;
@@ -101,7 +103,7 @@ $transition-duration: 0.1s;
 
   :checked + label,
   :checked ~ .init {
-    display: block;
+    display: flex;
   }
 
   :checked + div {

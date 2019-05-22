@@ -1,3 +1,5 @@
+@import "../tools/svg-data-url";
+
 $block-width: 400px;
 $block-height: 300px;
 
@@ -63,27 +65,3 @@ $world: (
     ),
   ),
 );
-
-%direction--up {
-  &::before {
-    content: "\f077"; // fa-chevron-up
-  }
-}
-
-%direction--down {
-  &::before {
-    content: "\f078"; // fa-chevron-down
-  }
-}
-
-%direction--left {
-  &::before {
-    content: "\f053"; // fa-chevron-left
-  }
-}
-
-%direction--right {
-  &::before {
-    content: "\f054"; // fa-chevron-right
-  }
-}

@@ -1,0 +1,29 @@
+@import "../tools/str-replace";
+
+$svg-encoding-map: (
+  ("\000D", "%0D"),
+  ("\000A", "%0A"),
+  ("%", "%25"),
+  ("#", "%23"),
+  ("(", "("),
+  (")", ")"),
+  ("<", "%3C"),
+  (">", "%3E"),
+  ("?", "%3F"),
+  ("[", "%5B"),
+  ("\\", "%5C"),
+  (")", "%5D"),
+  ("^", "%5E"),
+  ("`", "%60"),
+  ("{", "%7B"),
+  ("|", "%7C"),
+  ("}", "%7D"),
+);
+
+@function svg-data-url($svg-string) {
+  @each $entity in $svg-encoding-map {
+    $svg-string: str-replace($svg-string, nth($entity, 1), nth($entity, 2));
+  }
+
+  @return quote("data:image/svg+xml,#{$svg-string}");
+}

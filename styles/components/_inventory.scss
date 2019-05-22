@@ -1,3 +1,8 @@
+@import "../tools/svg-data-url";
+@import "../tools/str-replace";
+@import "../variables/game-settings";
+@import "../variables/svgs";
+
 #inventory-open {
   display: none;
 }
@@ -27,14 +32,16 @@
     border-radius: .04em 0 0 .04em;
 
     &::after {
-      content: "\f053"; // fa-chevron-left
+      content: '';
       display: block;
-      line-height: .30em;
-      text-align: center;
-      color: #937d45;
-      text-shadow: 0 .02em #4d3c31;
-      font-family: FontAwesome;
-      font-size: 0.15em;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent 50% 50% no-repeat;
+      background-image: url(svg-data-url(fill($svg-8x5-left-chevron, #937d45)));
+      background-size: 0.10em 0.16em;
     }
   }
 
@@ -71,7 +78,7 @@
     }
 
     &__toggle::after {
-      content: "\f054"; // fa-chevron-right
+      transform: rotate(180deg);
     }
   }
 }

@@ -1,13 +1,17 @@
 @import "../variables/game-settings";
 @import "../tools/game-engine";
 
+@mixin kill-lock() {
+  transform: translateY(-0.40em);
+  opacity: 0;
+}
+
 @include prop(green-lock, $w:32, $h:34, $x:237, $y:249, $z:1) {
   background-image: url('../i/green-lock.png');
   pointer-events: none;
 
   @include if-got('key-1') {
-    transform: translateY(-40em);
-    opacity: 0;
+    @include kill-lock;
   }
 }
 
@@ -16,8 +20,7 @@
   pointer-events: none;
 
   @include if-got('key-2') {
-    transform: translateY(-40em);
-    opacity: 0;
+    @include kill-lock;
   }
 }
 
@@ -26,8 +29,7 @@
   pointer-events: none;
 
   @include if-got('key-3') {
-    transform: translateY(-40em);
-    opacity: 0;
+    @include kill-lock;
   }
 }
 
@@ -37,7 +39,7 @@
     background-image: url('../i/trap-door.png');
     transition-delay: 0;
     pointer-events: none;
-    transform-origin: 50% 60em;
+    transform-origin: 50% 0.60em;
     transition:
       transform $default-block-transition-duration cubic-bezier(.4,.0,.6,-0.6),
       opacity 0s $default-block-transition-duration;

@@ -1,0 +1,55 @@
+@import "../tools/svg-data-url";
+@import "../tools/str-replace";
+@import "../variables/svgs";
+@import "../variables/game-settings";
+
+@function fill($svg-string, $fill-color: black) {
+  @return str-replace($svg-string, FILLCOLOR, $fill-color);
+}
+
+%direction--up,
+%direction--down,
+%direction--left,
+%direction--right {
+  &::before {
+    background: transparent 50% 50% no-repeat;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+%direction--up {
+  &::before {
+    content: '';
+    background-image: url(svg-data-url(fill($svg-5x8-up-chevron, #937d45)));
+    background-size: 0.16em 0.10em;
+  }
+}
+
+%direction--down {
+  &::before {
+    content: '';
+    background-image: url(svg-data-url(fill($svg-5x8-down-chevron, #937d45)));
+    background-size: 0.16em 0.10em;
+  }
+}
+
+%direction--left {
+  &::before {
+    content: '';
+    background-image: url(svg-data-url(fill($svg-8x5-left-chevron, #937d45)));
+    background-size: 0.10em 0.16em;
+  }
+}
+
+%direction--right {
+  &::before {
+    content: '';
+    background-image: url(svg-data-url(fill($svg-8x5-right-chevron, #937d45)));
+    background-size: 0.10em 0.16em;
+  }
+}
