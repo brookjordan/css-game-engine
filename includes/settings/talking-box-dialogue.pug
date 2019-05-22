@@ -1,0 +1,98 @@
+-
+  let talkingBoxDialogue = {
+    name: 'radio',
+    conversations: [
+      {
+        name: 'part-1',
+        text: 'Oh hi!',
+        dialogues: [
+          {
+            name: '1',
+            text: "I'm a talking box.",
+            links: [
+              {
+                ref: 'part-1__2',
+                text: 'Holy shit, wow!',
+              },
+              {
+                ref: 'part-3__ready',
+                text: 'Suck a dick…',
+              },
+            ],
+          },
+
+          {
+            name: '2',
+            text: "I like you. You're great.",
+            links: [
+              {
+                ref: 'part-1__3',
+                text: "I… <i>eer…</i> you're cool too!",
+                textNeedsToBeEscaped: 'lol,jkz',
+              },
+            ],
+          },
+
+          {
+            name: '3',
+            text: "It was lovely talking to you!",
+            links: [
+              {
+                ref: 'part-2__ready',
+                text: 'You too. x',
+              },
+            ],
+          },
+        ],
+      },
+
+
+      {
+        name: 'part-2',
+        text: 'Take care now!',
+        dialogues: [
+          {
+            name: '1',
+            text: "Oh. Hi again.",
+            links: [
+              {
+                ref: 'part-2__2',
+                text: 'Tell me a joke!',
+              },
+            ],
+          },
+
+          {
+            name: '2',
+            text: "I don't know any jokes",
+            links: [
+              {
+                ref: 'part-3__ready',
+                text: "😢",
+              },
+            ],
+          },
+        ],
+      },
+
+
+      {
+        name: 'part-3',
+        text: 'Leave me <b>alone</b>.',
+        textNeedsToBeEscaped: 'lol,jkz',
+        dialogues: [
+          {
+            name: '1',
+            text: "FUCK <b><i>OFF!</i></b>",
+            textNeedsToBeEscaped: 'lol,jkz',
+            links: [
+              {
+                ref: 'part-3__ready',
+                text: '…',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };

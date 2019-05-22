@@ -1,6 +1,8 @@
 @import '../variables/game-engine-variables';
 @import '../tools/contain-within-window';
 @import '../tools/strip-unit';
+@import '../tools/items';
+@import '../tools/posessions';
 
 // %direction--up {}
 // %direction--down {}
@@ -98,19 +100,19 @@
   }
 
   .#{$game-class} {
-    width: $world-aspect-y * 1em;
-    height: $world-aspect-x * 1em;
+    width: $world-aspect-y * .01em;
+    height: $world-aspect-x * .01em;
     position: relative;
-    font-size: 1px;
+    font-size: 100px;
     transition: width 0.2s, height 0.2s, font-size 0.2s;
     @if not $show-outside-blocks {
       overflow: hidden;
     }
 
     #full-screen:checked ~ & {
-      font-size: 100vw / $world-aspect-x / $world-aspect;
+      font-size: 10000vw / $world-aspect-x / $world-aspect;
       @include contain-over-media-query($world-aspect-y, $world-aspect-x) {
-        font-size: 100vh / $world-aspect-y * $world-aspect;
+        font-size: 10000vh / $world-aspect-y * $world-aspect;
       }
     }
   }
@@ -300,19 +302,19 @@
 
 @mixin size($w: null, $h: null) {
   @if $w != null {
-    width: $w * 1em;
+    width: $w * .01em;
   }
   @if $h != null {
-    height: $h * 1em;
+    height: $h * .01em;
   }
 }
 
 @mixin pos($x: null, $y: null) {
   @if $x != null {
-    left: $x * 1em;
+    left: $x * .01em;
   }
   @if $y != null {
-    top: $y * 1em;
+    top: $y * .01em;
   }
 }
 
@@ -377,6 +379,7 @@
     $value-getter-name,
     $w, $h, $x, $y, $z,
   ) {
+    display: block;
     @content;
   }
 }
@@ -394,6 +397,7 @@
     $value-getter-name,
     $w, $h, $x, $y, $z,
   ) {
+    display: block;
     @content;
   }
 }
@@ -409,6 +413,54 @@
   @include named-element(
     prop,
     $prop-name,
+    $w, $h, $x, $y, $z,
+  ) {
+    display: block;
+    @content;
+  }
+}
+
+@mixin posession(
+  $posession-name,
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null,
+) {
+  .item--name-#{$posession-name}:checked ~ .inventory .posession-toggle--name-#{$posession-name} {
+    @include posessions-collected;
+  }
+  .posession--name-#{$posession-name}:checked ~ .inventory .posession-toggle--name-#{$posession-name} {
+    @include posessions-active;
+  }
+
+  @include named-element(
+    posession-toggle,
+    $posession-name,
+    $w, $h, $x, $y, $z,
+  ) {
+    @content;
+  }
+}
+
+@mixin item-getter(
+  $item-getter-name,
+  $w: null,
+  $h: null,
+  $x: null,
+  $y: null,
+  $z: null,
+) {
+  .item--name-#{$item-getter-name}:checked {
+    ~ .item-getter--name-#{$item-getter-name},
+    ~ .world .item-getter--name-#{$item-getter-name} {
+      @include items-collected;
+    }
+  }
+  @include named-element(
+    item-getter,
+    $item-getter-name,
     $w, $h, $x, $y, $z,
   ) {
     @content;

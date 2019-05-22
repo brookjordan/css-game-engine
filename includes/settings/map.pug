@@ -1,9 +1,12 @@
+include ../settings/talking-box-dialogue
+
 -
   const map = {
     width: 3,
     height: 2,
     fullScreen: true,
     title: 'Digging deeper',
+    useInventory: true,
     windowProps: [
       'character',
       'overlay',
@@ -23,7 +26,7 @@
           'green-lock',
           'blue-lock',
           'red-lock',
-        ]
+        ],
       },
       {
         name: 'first-key',
@@ -36,9 +39,21 @@
       },
       {
         name: 'first-ladder',
+        items: [
+          {
+            name: 'wooden-shoes',
+            type: 'footwear',
+            collected: true,
+            active: true,
+            order: 0,
+          },
+        ],
       },
       {
         name: 'exit',
+        conversations: [
+          talkingBoxDialogue,
+        ],
       },
       null,
       {
@@ -48,6 +63,13 @@
             name: 'key-3',
             type: 'key',
           },
+        ],
+        items: [
+          {
+            name: 'golden-shoes',
+            type: 'footwear',
+            order: 1,
+          }
         ],
       },
     ],

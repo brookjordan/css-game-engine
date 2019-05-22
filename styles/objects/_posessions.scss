@@ -1,0 +1,44 @@
+@import "../variables/game-settings";
+@import "../tools/game-engine";
+
+@keyframes collect-posession {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.posession,
+.posession-toggle {
+  display: none;
+}
+
+.posession-toggle {
+  background: transparent no-repeat 50% 50% / contain;
+  animation: collect-posession 400ms cubic-bezier(0.5, 1.68, 0.53, 1);
+  transition: transform 0.2s cubic-bezier(0.4,-0.4, 0.6, 1.4);
+}
+
+@include posession(wooden-shoes) {
+  background: url("../i/wooden-shoes.png") no-repeat 50% 50% / contain;
+}
+
+@include posession(golden-shoes) {
+  background: url("../i/golden-shoes.png") no-repeat 50% 50% / contain;
+}
+
+@include item-getter(golden-shoes, $w:50, $h:23, $x:40, $y:200) {
+  background-image: url('../i/golden-shoes.png');
+
+  @include if-in-block-alt(a, $fixed: true) {
+    animation: character-bob--a $default-block-transition-duration ease-in-out;
+  }
+
+  @include if-in-block-alt(b, $fixed: true) {
+    animation: character-bob--b $default-block-transition-duration ease-in-out;
+  }
+}
+

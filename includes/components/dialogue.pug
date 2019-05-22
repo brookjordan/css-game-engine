@@ -1,0 +1,24 @@
+mixin print-dialogue(conversationSet)
+  .dialogue
+    - let cnvIndex = 0;
+    each cnv in conversationSet.conversations
+      input(id=`conversation-set--${conversationSet.name}__${cnv.name}__ready`, type="radio", name=conversationSet.name, checked=cnvIndex === 0)
+      each dlg in cnv.dialogues
+        input(id=`conversation-set--${conversationSet.name}__${cnv.name}__${dlg.name}`, type="radio", name=conversationSet.name)
+        div
+          if dlg.textNeedsToBeEscaped === 'lol,jkz'
+            span !{dlg.text}
+          else
+            span #{dlg.text}
+          each link in dlg.links
+            label(for=`conversation-set--${conversationSet.name}__${link.ref}`)
+              if link.textNeedsToBeEscaped === 'lol,jkz'
+                span !{link.text}
+              else
+                span #{link.text}
+      label(for=`conversation-set--${conversationSet.name}__${cnv.name}__${cnv.dialogues[0].name}`, class="init")
+        if cnv.textNeedsToBeEscaped === 'lol,jkz'
+          span !{cnv.text}
+        else
+          span #{cnv.text}
+      - cnvIndex += 1;

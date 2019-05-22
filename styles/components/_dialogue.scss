@@ -1,0 +1,121 @@
+@mixin speaker-is-active {
+  .dialogue :checked + div ~ & {
+    @content;
+  }
+}
+
+@mixin bob-up {
+  transform: translateY(-.05em);
+  box-shadow: 0 .1em 0 .05em rgba(black, 0.1);
+}
+@mixin bob-down {
+  transform: translateY(0);
+  box-shadow: 0 0 0 0 rgba(black, 0);
+}
+
+$transition-duration: 0.1s;
+
+@keyframes bob-down {
+  0% {
+    @include bob-up;
+  }
+  100% {
+    @include bob-down;
+  }
+}
+
+.dialogue {
+  display: flex;
+  position: absolute;
+  top: 2.05em;
+  left: 2.25em;
+
+  > label,
+  > input,
+  > div {
+    display: none;
+    animation: none;
+  }
+
+  label {
+    cursor: pointer;
+  }
+
+  span {
+    font-size: 0.12em;
+  }
+
+  > div {
+    flex-direction: column;
+    position: absolute;
+    bottom: calc(100% + 0.2em);
+    width: 2em;
+    max-width: max-content;
+    padding: 0.1em 0.15em;
+    color: #8b1cad;
+    background: #64b4e8;
+    box-shadow: 0 .01em 0 .02em #1f256d;
+    border-radius: 0.05em;
+
+    label {
+      padding: 0.1em 0.15em;
+      margin-bottom: -.2em;
+      margin-top: 0.1em;
+      margin-right: -.25em;
+      background: #675542;
+      color: #d8ae43;
+      border-radius: 0.02em;
+      box-shadow: 0 .01em 0 .02em #4d3c31;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      + label {
+        margin-top: 0.25em;
+      }
+    }
+  }
+
+  .init {
+    @include bob-down;
+
+    order: 1;
+    padding: 0.1em;
+    background: hsl(20, 30%, 50%);
+    //animation: bob-down $transition-duration;
+    box-shadow: 0.02em 0.14em 0 .04em #675542;
+    border-radius: 0.02em;
+    transition:
+      transform $transition-duration,
+      box-shadow $transition-duration;
+
+    ~ .init {
+      background: hsl(20, 40%, 55%);
+
+      ~ .init {
+        background: hsl(20, 60%, 65%);
+      }
+    }
+  }
+
+  :checked + label,
+  :checked ~ .init {
+    display: block;
+  }
+
+  :checked + div {
+    display: flex;
+  }
+
+  :checked ~ .init ~ .init {
+    display: none;
+  }
+}
+
+.dialogue .init {
+  @include speaker-is-active {
+    //@include bob-up;
+    pointer-events: none;
+  }
+}

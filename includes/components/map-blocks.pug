@@ -1,23 +1,24 @@
+include ../components/dialogue
+
 mixin print-map-blocks(map)
   each area in map.areas
     if area && area.accessible !== false
       .map-block(class=`map-block--name-${area.name} map-block--xy-${area.x}-${area.y}`)
         -
-          let areaProps = area.props || [];
-          let areaValues = area.values || [];
+          let areaProps = area.props;
+          let areaValues = area.values;
+          let areaItems = area.items;
 
         each prop in areaProps
-          - let propName = (prop.name || prop)
-          .prop.sprite(class=`${nameSprite(propName)} ${nameProp(propName)}`)
+          .prop.sprite(class=`${nameSprite(prop.name)} ${nameProp(prop.name)}`)
 
         each value in areaValues
           -
-            let valueName = value.name || value;
-            let valueFor = `value--${valueName}`;
+            let valueFor = `value--${value.name}`;
             let valueTypes = value.type ? [value.type] : value.types;
             let valueClass = trim`
-              ${nameSprite(valueName)}
-              ${nameValueGetter(valueName)}
+              ${nameSprite(value.name)}
+              ${nameValueGetter(value.name)}
               ${
                 valueTypes
                   ? valueTypes.map(type => `value-getter--type-${type}`).join(' ')
@@ -25,3 +26,22 @@ mixin print-map-blocks(map)
               }
             `;
           label.value-getter.sprite(class=valueClass, type="checkbox", for=valueFor)
+
+        each item in areaItems
+          -
+            let itemFor = `item--${item.name}`;
+            let itemTypes = item.type ? [item.type] : item.types;
+            let itemClass = trim`
+              ${nameSprite(item.name)}
+              ${nameItemGetter(item.name)}
+              ${
+                itemTypes
+                  ? itemTypes.map(type => `item-getter--type-${type}`).join(' ')
+                  : ''
+              }
+            `;
+          label.item-getter.sprite(class=itemClass, type="checkbox", for=itemFor)
+
+        if area.conversations
+          each conversation in area.conversations
+            +print-dialogue(conversation)

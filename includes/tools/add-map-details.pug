@@ -1,5 +1,35 @@
 -
   let y = 0;
+  const items = [];
+  const props = [];
+  const values = [];
+  const sprites = {
+    items,
+    props,
+    values,
+  };
+  const DEFAULT_VALUES = {
+    items: {
+      type: null,
+      collected: false,
+      active: false,
+      order: 0,
+      removable: false,
+      showInInventory: true,
+    },
+
+    props: {},
+
+    values: {
+      type: null,
+      collected: false,
+      order: 0,
+    },
+  };
+
+  map.windowProps || (map.windowProps = []);
+  map.worldProps || (map.worldProps = []);
+  
   while (y < map.height) {
     let x = 0;
     y += 1;
@@ -7,13 +37,83 @@
       x += 1;
       let areaIndex = ((y - 1) * map.width) + ((x - 1) % map.width);
       let area = map.areas[areaIndex];
-      if (!area) { continue; }
+      if (!area) {
+        map.areas[areaIndex] = { accessible: false };
+        continue;
+      }
       let alt  = (y % 2 + x % 2) === 1 ? 'b' : 'a';
+
+      standardise(area, 'items');
+      standardise(area, 'props');
+      standardise(area, 'values');
 
       Object.assign(area, {
         x,
         y,
         alt,
+        items: area.items || [],
+        props: area.props || [],
+        values: area.values || [],
       });
     }
+  }
+
+  Object.assign(map, {
+    items,
+    props,
+    values,
+  });
+
+  map.items.sort(thingSort);
+
+  map.values.sort(thingSort);
+
+  function standardise(area, type) {
+    area[type] = (area[type] || [])
+      .map(thingRaw => {
+        let thing = {};
+        if (typeof thingRaw === 'string') {
+          thing = { name: thingRaw };
+        } else {
+          thing = thingRaw;
+        }
+
+        if (!thing.name) {
+          throw new Error(`One of the "${type}" in the "${area.name}" area has been created with no name.\n${JSON.stringify(thingRaw, null, 2)}`);
+        }
+
+        return Object.assign(
+          {},
+          DEFAULT_VALUES[type],
+          thing
+        );
+      });
+    area[type] && area[type].forEach(thing => {
+      addValue(thing, sprites[type]);
+    });
+  }
+
+  function addValue(value, arr) {
+    if (nameExists(value, items)) {
+      throw new Error(`The value "${value.name || value}" has been repeated.`);
+    }
+    arr.push(value);
+  }
+
+  function nameExists(ref, arr) {
+    return arr.map(i => i.name || i).indexOf((ref.name || ref)) === -1
+      ? false
+      : true;
+  }
+
+  function thingSort(a, b) {
+    if (a.type && b.type && a.type !== b.type) {
+      return a.type.localeCompare(b.type);
+    }
+
+    if (a.order !== b.order) {
+      return a.order - b.order;
+    }
+    
+    return a.name.localeCompare(b.name);
   }
