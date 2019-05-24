@@ -20,24 +20,21 @@ include includes/components/full-screen-toggle
 
 doctype html
 html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    meta(http-equiv="X-UA-Compatible", content="ie=edge")
-    meta(name="apple-mobile-web-app-capable", content="yes")
-    title #{map.title || 'CSS Game Engine'}
-    link(rel="stylesheet", href="./styles/entry.css")
+  meta(charset="UTF-8")
+  meta(name="viewport", content="width=device-width, initial-scale=1.0")
+  meta(http-equiv="X-UA-Compatible", content="ie=edge")
+  meta(name="apple-mobile-web-app-capable", content="yes")
+  title #{map.title || 'CSS Game Engine'}
+  link(rel="stylesheet", href="./styles/entry.css")
 
-  body
-    +full-screen-toggle(map)
-
-    .game
-      +print-map-values(map)
-      +print-map-items(map)
-      +print-map-positions(map)
-      +print-map-directions(map)
-      .world
-        +print-map-blocks(map)
-        +print-world-relative-props(map)
-      +print-inventory(map)
-      +print-window-relative-props(map)
+  +full-screen-toggle(map)
+  .game
+    +print-map-values(map)
+    +print-map-items(map)
+    +print-map-positions(map)
+    +print-map-directions(map)
+    .world
+      +print-map-blocks(map)
+      +print-world-relative-props(map)
+    +print-inventory(map)
+    +print-window-relative-props(map)
