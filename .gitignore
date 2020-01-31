@@ -57,9 +57,12 @@ typings/
 # dotenv environment variables file
 .env
 
-# compiled files - will probably be more specific in future
+# temporary/settings
+.sass-cache/
+.vscode
+
+# compiled files
 fonts
 *.html
 *.css
 *.css.map
-.vscode
