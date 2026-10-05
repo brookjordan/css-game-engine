@@ -5,3 +5,6 @@ mixin print-inventory(map)
       label.inventory__toggle(for="inventory-open")
       .inventory__container
         .inventory__contents
+          each item in map.items
+            if item.showInInventory
+              label.posession-toggle(class=`posession-toggle--type-${item.type} posession-toggle--name-${item.name}`, for=`posession--${item.name}`)

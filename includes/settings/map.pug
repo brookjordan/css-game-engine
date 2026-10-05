@@ -40,7 +40,13 @@ include ../settings/talking-box-dialogue
       {
         name: 'first-ladder',
         items: [
-          'wooden-shoes',
+          {
+            name: 'wooden-shoes',
+            type: 'footwear',
+            collected: true,
+            active: true,
+            order: 0,
+          },
         ],
       },
       {
@@ -59,7 +65,11 @@ include ../settings/talking-box-dialogue
           },
         ],
         items: [
-          'golden-shoes',
+          {
+            name: 'golden-shoes',
+            type: 'footwear',
+            order: 1,
+          }
         ],
       },
     ],

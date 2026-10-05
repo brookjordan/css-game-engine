@@ -1,0 +1,10 @@
+-
+  let itemGetterNames = [];
+  function nameItemGetter(name) {
+    if (itemGetterNames.includes(name)) {
+      console.warn(`There are multiple item-getters being created with the name of: "${name}"`);
+    } else {
+      itemGetterNames.push(name);
+    }
+    return `item-getter--name-${name}`;
+  }
