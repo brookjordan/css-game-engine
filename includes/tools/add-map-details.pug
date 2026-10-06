@@ -3,6 +3,29 @@
   const items = [];
   const props = [];
   const values = [];
+  const sprites = {
+    items,
+    props,
+    values,
+  };
+  const DEFAULT_VALUES = {
+    items: {
+      type: null,
+      collected: false,
+      active: false,
+      order: 0,
+      removable: false,
+      showInInventory: true,
+    },
+
+    props: {},
+
+    values: {
+      type: null,
+      collected: false,
+      order: 0,
+    },
+  };
 
   map.windowProps || (map.windowProps = []);
   map.worldProps || (map.worldProps = []);
@@ -20,20 +43,9 @@
       }
       let alt  = (y % 2 + x % 2) === 1 ? 'b' : 'a';
 
-      area.items = (area.items || []).map(item => typeof item === 'string' ? { name: item } : item);
-      area.items && area.items.forEach(item => {
-        addValue(item, items);
-      });
-
-      area.props = (area.props || []).map(prop => typeof prop === 'string' ? { name: prop } : prop);
-      area.props && area.props.forEach(prop => {
-        addValue(prop, props);
-      });
-
-      area.values = (area.values || []).map(value => typeof value === 'string' ? { name: value } : value);
-      area.values && area.values.forEach(value => {
-        addValue(value, values);
-      });
+      standardise(area, 'items');
+      standardise(area, 'props');
+      standardise(area, 'values');
 
       Object.assign(area, {
         x,
@@ -52,6 +64,35 @@
     values,
   });
 
+  map.items.sort(thingSort);
+
+  map.values.sort(thingSort);
+
+  function standardise(area, type) {
+    area[type] = (area[type] || [])
+      .map(thingRaw => {
+        let thing = {};
+        if (typeof thingRaw === 'string') {
+          thing = { name: thingRaw };
+        } else {
+          thing = thingRaw;
+        }
+
+        if (!thing.name) {
+          throw new Error(`One of the "${type}" in the "${area.name}" area has been created with no name.\n${JSON.stringify(thingRaw, null, 2)}`);
+        }
+
+        return Object.assign(
+          {},
+          DEFAULT_VALUES[type],
+          thing
+        );
+      });
+    area[type] && area[type].forEach(thing => {
+      addValue(thing, sprites[type]);
+    });
+  }
+
   function addValue(value, arr) {
     if (nameExists(value, items)) {
       throw new Error(`The value "${value.name || value}" has been repeated.`);
@@ -63,4 +104,16 @@
     return arr.map(i => i.name || i).indexOf((ref.name || ref)) === -1
       ? false
       : true;
+  }
+
+  function thingSort(a, b) {
+    if (a.type && b.type && a.type !== b.type) {
+      return a.type.localeCompare(b.type);
+    }
+
+    if (a.order !== b.order) {
+      return a.order - b.order;
+    }
+    
+    return a.name.localeCompare(b.name);
   }

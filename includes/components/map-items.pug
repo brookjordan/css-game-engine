@@ -1,0 +1,31 @@
+mixin print-map-items(map)
+  each item in map.items
+    -
+      let itemID = `item--${item.name}`;
+      let itemTypes = (item.type ? [item.type] : item.types) || [];
+      let itemClass = trim`
+        item--name-${item.name}
+        ${itemTypes.map(type => `item--type-${type}`).join(' ')}
+      `;
+    input.item(
+      id=printID(itemID),
+      class=`${itemClass}`,
+      checked=item.collected,
+      type='checkbox'
+    )
+
+  each item in map.items
+    -
+      let posessionID = `posession--${item.name}`;
+      let posessionTypes = (item.type ? [item.type] : item.types) || [];
+      let posessionClass = trim`
+        posession--name-${item.name}
+        ${posessionTypes.map(type => `posession--type-${type}`).join(' ')}
+      `;
+    input.posession(
+      id=posessionID,
+      class=posessionClass,
+      type=item.removable ? 'checkbox' : 'radio',
+      name=posessionTypes[0],
+      checked=item.active
+    )

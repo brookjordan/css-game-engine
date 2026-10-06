@@ -45,9 +45,9 @@
   }
 }
 
-@include prop(character, $w:40, $h:100, $x:145, $y:140) {
+@include prop(character, $w:40, $h:66, $x:145, $y:165) {
   background-image: url('../i/character.png');
-  transform-origin: 50% 84em;
+  transform-origin: 50% 0.64em;
 
   @include if-in-block-alt(a, $fixed: true) {
     animation: character-bob--a $default-block-transition-duration ease-in-out;
